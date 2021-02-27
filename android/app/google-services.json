@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "526956106923",
+    "project_id": "jobspri-1b798",
+    "storage_bucket": "jobspri-1b798.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:526956106923:android:c62f231a879c09086d13ee",
+        "android_client_info": {
+          "package_name": "JobSpri.job_spri"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "526956106923-s2qvkhpthrhuv2gqi4g2airenf4qln48.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "JobSpri.job_spri",
+            "certificate_hash": "f726ad8df75c315fc0f57d79ba55deaf03d0937c"
+          }
+        },
+        {
+          "client_id": "526956106923-ckhqb2cp42ka8hganrg0nntavptadshs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbVbNs4Wsh6rE_mKud_FCxfNuQ4jGOoyo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "526956106923-ckhqb2cp42ka8hganrg0nntavptadshs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
