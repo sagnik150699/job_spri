@@ -6,7 +6,7 @@ class Database {
   Database({this.uid});
 
   final CollectionReference experience = FirebaseFirestore.instance.collection(
-      'experience');
+      'Experience');
   final CollectionReference name = FirebaseFirestore.instance.collection(
       'Name');
   final CollectionReference contact = FirebaseFirestore.instance.collection(

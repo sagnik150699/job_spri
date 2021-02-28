@@ -21,23 +21,3 @@ class MyApp extends StatelessWidget {
 
 
 
-
-// return MaterialApp(
-// home: Stack(
-// children: [
-// Container(
-// decoration: BoxDecoration(
-// gradient: LinearGradient(
-// begin: Alignment.topRight,
-// end: Alignment.bottomLeft,
-// colors: [
-// const Color(0xff1B1A2A),
-// const Color(0xff1B192A),
-// const Color(0xff4D2136),
-// ],
-// ),
-// ),
-// ),
-// ],
-// ),
-// );

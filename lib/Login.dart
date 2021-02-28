@@ -174,12 +174,12 @@ class _loginState extends State<login> {
                                   password: _passwordField.text);
                           print("Logged");
                           if (newUser != null) {
-                            Database(uid:_auth.currentUser.uid).
-                            updateUserContact("sagnikbhattacharya", 9804044741, 'kolkata');
-                            Database(uid:_auth.currentUser.uid).
-                            updateUserName("Sagnik Bhattacharya");
-                            Database(uid:_auth.currentUser.uid).
-                            updateUserData("Django developer at ", "Made a few ", "12/12/21 to 12/123/21");
+                            // Database(uid:_auth.currentUser.uid).
+                            // updateUserContact("sagnikbhattacharya", 9804044741, 'kolkata');
+                            // Database(uid:_auth.currentUser.uid).
+                            // updateUserName("Sagnik Bhattacharya");
+                            // Database(uid:_auth.currentUser.uid).
+                            // updateUserData("Django developer at ", "Made a few ", "12/12/21 to 12/123/21");
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -212,6 +212,13 @@ class _loginState extends State<login> {
                       final user = await _googleSignIn.signIn();
                       print("Hello");
                       if (user != null) {
+                        final GoogleSignInAuthentication googleSignInAuthentication = await user.authentication;
+                        final AuthCredential credential = GoogleAuthProvider.credential(
+                          accessToken: googleSignInAuthentication.accessToken,
+                          idToken: googleSignInAuthentication.idToken,
+                        );
+                        final UserCredential authResult= await _auth.signInWithCredential(credential);
+                        print(authResult.user.uid);
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => Screen1()),
