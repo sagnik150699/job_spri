@@ -11,6 +11,10 @@ class Database {
       'Name');
   final CollectionReference contact = FirebaseFirestore.instance.collection(
       'Contact');
+  final CollectionReference cityC = FirebaseFirestore.instance.collection(
+      'City');
+  final CollectionReference address= FirebaseFirestore.instance.collection(
+      'Address');
 
   Future updateUserData(String title, String description, String date) async {
     return await experience.doc(uid).set({
@@ -24,11 +28,20 @@ class Database {
       'Name': names,
     });
   }
-  Future updateUserContact(String email, int number, String address) async {
+  //get name
+  Future updateUserContact( String number) async {
     return await contact.doc(uid).set({
-      'email': email,
-      'number': number,
-      'address': address
+      'Contact': number,
+    });
+  }
+  Future updateUserCity( String city) async {
+    return await cityC.doc(uid).set({
+      'City': city,
+    });
+  }
+  Future updateUserAddress( String address1) async {
+    return await address.doc(uid).set({
+      'Address': address1,
     });
   }
 }
