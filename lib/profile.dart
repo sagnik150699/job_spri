@@ -17,15 +17,23 @@ class _ProfileState extends State<Profile> {
   bool inputNumber = false;
   bool inputAddress = false;
   bool inputCity = false;
+  bool inputJob =false;
+  var counter;
   TextEditingController name = TextEditingController();
   TextEditingController address = TextEditingController();
   TextEditingController city = TextEditingController();
   TextEditingController number = TextEditingController();
+  TextEditingController job1 = TextEditingController();
+  TextEditingController desc1 = TextEditingController();
+
   final _auth = FirebaseAuth.instance;
   String displayName = "";
   String displayAddress = "";
   String displayNumber = " ";
   String displayCity = "";
+ List <String> displayJob1;
+  List <String> displayDesc1;
+  Variables variable = new Variables();
 
   Future returnName() async {
     await FirebaseFirestore.instance
@@ -73,6 +81,31 @@ class _ProfileState extends State<Profile> {
     });
     return null;
   }
+  Future returnJob() async {
+    for (var i in counter){
+       await FirebaseFirestore.instance
+          .collection("Job$counter")
+          .doc(_auth.currentUser.uid)
+          .get()
+          .then((value) {
+         displayJob1[counter] = value.data()["Job$counter"];
+         displayDesc1[counter] = value.data()["Desc$counter"];
+        // //print(value.data()["City"]);
+      });
+    }
+    return null;
+  }
+
+   printJob() {
+    return ListView.builder(
+      itemCount: counter,
+      itemBuilder: (context,index){
+        return ListTile(
+          leading: variable.text2(displayJob1[index], 15, Colors.white, FontWeight.w200),
+          trailing: variable.text2(displayDesc1[index], 15, Colors.white, FontWeight.w200),
+        );
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +114,7 @@ class _ProfileState extends State<Profile> {
     final double categoryHeight = size.height;
     final double categoryWidth = size.width;
 
-    Variables variable = new Variables();
+
 
     return Scaffold(
       appBar: AppBar(
@@ -155,22 +188,6 @@ class _ProfileState extends State<Profile> {
                                     color: Colors.white,
                                   ),
                                   onPressed: () async {
-                                    // await FirebaseFirestore.instance
-                                    //     .collection("Name")
-                                    //     .doc(_auth.currentUser.uid)
-                                    //     .get()
-                                    //     .then((value) {
-                                    //       if(value.data()["Name"]!= null){
-                                    //         setState(() {
-                                    //           displayName = value.data()["Name"];
-                                    //         });
-                                    //         displayName = value.data()["Name"];
-                                    //       }
-                                    //
-                                    //
-                                    //   //print(value.data()["Name"]);
-                                    // });
-
                                     setState(() {
                                       inputName = true;
                                       print(inputName);
@@ -508,25 +525,61 @@ class _ProfileState extends State<Profile> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           variable.text2("Work experience", 20.0, Colors.white,
-                              FontWeight.bold),
+                              FontWeight.normal),
+                          inputJob?
+                          IconButton(
+                              icon: Icon(
+                                Icons.save,
+                                color: Colors.white,
+                              ),
+                              onPressed: () async{
+                               final count= await _database.checkCounter(counter);
+                               counter = count;
+                                print("hello world $counter");
+                               await _database.updateUserJob1(job1.text, desc1.text,counter);
+                                await FirebaseFirestore.instance
+                                    .collection("Job$counter")
+                                    .doc(_auth.currentUser.uid)
+                                    .get()
+                                    .then((value) {
+                                  // displayJob1[count] = value.data()["Job"];
+                                  // displayDesc1[count] = value.data()["Desc"];
+                                  // //print(value.data()["City"]);
+                                });
+                                setState(() {
+                                  inputJob=false;
+                                  counter++;
+                                });
+                                await _database.updateCounter(counter);
+                              }):
                           IconButton(
                               icon: Icon(
                                 Icons.add_box_rounded,
                                 color: Colors.white,
                               ),
                               onPressed: () {
-                                if (_auth.currentUser.uid != null) {
-                                  Database(uid: _auth.currentUser.uid)
-                                      .updateUserContact("920830219");
-                                  Database(uid: _auth.currentUser.uid)
-                                      .updateUserName("Arani Bhattacharya");
-                                  Database(uid: _auth.currentUser.uid)
-                                      .updateUserData("Flutter developer at ",
-                                          "Made a Stop ", "1021");
-                                }
+                               setState(() {
+                                 inputJob = true;
+                               });
+
                               })
                         ],
-                      ))
+                      )),
+                  //Input Job
+                  FutureBuilder(
+                    future: returnJob(),
+                      builder: (context,snapshot){
+                    return inputJob?
+                    Column(
+                      children: [
+                        TextFormField(controller: job1,),
+                        TextFormField(controller: desc1,),
+                      ],
+                    )
+
+                        :
+                        printJob();
+                  })
                 ],
               ),
             ),

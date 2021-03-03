@@ -15,6 +15,9 @@ class Database {
       'City');
   final CollectionReference address= FirebaseFirestore.instance.collection(
       'Address');
+  final CollectionReference job1= FirebaseFirestore.instance.collection(
+      'Job1');
+  final CollectionReference counter = FirebaseFirestore.instance.collection('counter');
 
   Future updateUserData(String title, String description, String date) async {
     return await experience.doc(uid).set({
@@ -43,6 +46,35 @@ class Database {
     return await address.doc(uid).set({
       'Address': address1,
     });
+  }
+  Future updateUserJob1( String job,String desc,counter) async {
+    return await FirebaseFirestore.instance.collection('JOB$counter').doc(uid).set({
+      'Job$counter': job,
+      'Desc$counter': desc
+    });
+    // FirebaseFirestore.instance.collection(
+    //     return await'Job$counter').doc(uid).set({'Job': job});
+  }
+  Future  checkCounter (count)async{
+    try{
+       await FirebaseFirestore.instance
+          .collection("counter")
+          .doc(uid)
+          .get()
+          .then((value) {
+        count=value.data()["counter"];
+        print(count);
+      });
+
+    }
+    catch(e){
+     await counter.doc(uid).set({'counter': 0});
+     count=0;
+    }
+      return count;
+  }
+  Future updateCounter(updateCount)async{
+    await counter.doc(uid).set({'counter': updateCount});
   }
 }
 
