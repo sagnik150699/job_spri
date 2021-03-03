@@ -31,9 +31,17 @@ class _ProfileState extends State<Profile> {
   String displayAddress = "";
   String displayNumber = " ";
   String displayCity = "";
- List <String> displayJob1;
-  List <String> displayDesc1;
+ List <String> displayJob1= [][20];
+  List <String> displayDesc1=[][20];
+
   Variables variable = new Variables();
+
+
+  Future returnCounter() async{
+    Database _database = new Database(uid: _auth.currentUser.uid);
+    counter = await _database.checkCounter(counter);
+    print(counter);
+  }
 
   Future returnName() async {
     await FirebaseFirestore.instance
@@ -82,37 +90,54 @@ class _ProfileState extends State<Profile> {
     return null;
   }
   Future returnJob() async {
-    for (var i in counter){
+    for (var i =0 ; i<=counter; i++){
        await FirebaseFirestore.instance
           .collection("Job$counter")
           .doc(_auth.currentUser.uid)
           .get()
           .then((value) {
-         displayJob1[counter] = value.data()["Job$counter"];
-         displayDesc1[counter] = value.data()["Desc$counter"];
+         displayJob1[i] = value.data()["Job$i"];
+         print(displayJob1[i]);
+         displayDesc1[i] = value.data()["Desc$i"];
+         print(displayDesc1);
         // //print(value.data()["City"]);
       });
     }
     return null;
   }
 
-   printJob() {
-    return ListView.builder(
-      itemCount: counter,
-      itemBuilder: (context,index){
-        return ListTile(
-          leading: variable.text2(displayJob1[index], 15, Colors.white, FontWeight.w200),
-          trailing: variable.text2(displayDesc1[index], 15, Colors.white, FontWeight.w200),
-        );
-      });
-  }
+
 
   @override
   Widget build(BuildContext context) {
+
     Database _database = new Database(uid: _auth.currentUser.uid);
     final Size size = MediaQuery.of(context).size;
     final double categoryHeight = size.height;
     final double categoryWidth = size.width;
+    //counter=  _database.checkCounter(counter);
+    printJob()  {
+      return FutureBuilder(
+          future: returnCounter(),
+          builder: (context,snapshot){
+        return ListView.builder(
+            scrollDirection: Axis.vertical,
+            //shrinkWrap: true,
+            itemCount: counter,
+            itemBuilder: (context,index){
+              return ListTile(
+                leading: variable.text2(displayJob1[index], 15, Colors.white, FontWeight.w200),
+                trailing: variable.text2(displayDesc1[index], 15, Colors.white, FontWeight.w200),
+              );
+            })
+      ;});
+    }
+   // Future printJob() async{
+   //    return FutureBuilder(
+   //        future: returnCounter(),
+   //        builder:
+   //    );
+   //  }
 
 
 
@@ -141,6 +166,7 @@ class _ProfileState extends State<Profile> {
             child: Padding(
               padding: const EdgeInsets.only(left: 20.0, right: 20.0),
               child: ListView(
+                //mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(height: 30),
                   //Name
@@ -577,8 +603,10 @@ class _ProfileState extends State<Profile> {
                       ],
                     )
 
-                        :
-                        printJob();
+                        :SizedBox(
+                        height: 400,
+                        child: printJob());
+
                   })
                 ],
               ),
